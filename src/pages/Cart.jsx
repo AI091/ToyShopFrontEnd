@@ -4,6 +4,9 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
+import { useState } from "react";
+import { useEffect } from "react";
+import Axios from "axios";
 
 const Container = styled.div``;
 
@@ -154,11 +157,33 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const [cartItems , setCartItems] = useState(null) ; 
+  const [isLoading , setIsLoading] = useState(true); 
+  const [error , setError] = useState(null)
+  
+  useEffect(() => {
+    if (localStorage.getItem("token")){
+      Axios.get("http://localhost:3000/cart/", {
+      })
+      .then(function (response) {
+        if (response.status == 200){
+          console.log(response); 
+          
+        }
+      })
+    }
+
+  }, [])
+ 
+
   return (
     <Container>
       <Navbar />
       <Announcement />
       <Wrapper>
+      {isLoading && <div> Loading...</div>}
+      {error && <div> {error}</div>}
+      {}
         <Title>YOUR BAG</Title>
         <Top>
           <TopButton>CONTINUE SHOPPING</TopButton>

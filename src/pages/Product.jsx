@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
+import { useLocation, useParams } from "react-router-dom";
 
 const Container = styled.div``;
 
@@ -21,7 +22,7 @@ const ImgContainer = styled.div`
 const Image = styled.img`
   width: 100%;
   height: 90vh;
-  object-fit: cover;
+  object-fit: contain;
   ${mobile({ height: "40vh" })}
 `;
 
@@ -115,26 +116,25 @@ const Button = styled.button`
   }
 `;
 
-const Product = () => {
+
+const Product = (props) => {
+  const item  = useLocation().state ; 
+  console.log(item); 
   return (
     <Container>
       <Navbar />
       <Announcement />
       <Wrapper>
         <ImgContainer>
-          <Image src="https://i.ibb.co/S6qMxwr/jean.jpg" />
+          <Image src={'/images/'+item.image} />
         </ImgContainer>
         <InfoContainer>
-          <Title>Denim Jumpsuit</Title>
+          <Title>{item.name}</Title>
           <Desc>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
-            iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget
-            tristique tortor pretium ut. Curabitur elit justo, consequat id
-            condimentum ac, volutpat ornare.
+            {item.description}   
           </Desc>
-          <Price>$ 20</Price>
-          <FilterContainer>
+          <Price>EGP {item.price}</Price>
+          {/* <FilterContainer>
             <Filter>
               <FilterTitle>Color</FilterTitle>
               <FilterColor color="black" />
@@ -151,7 +151,7 @@ const Product = () => {
                 <FilterSizeOption>XL</FilterSizeOption>
               </FilterSize>
             </Filter>
-          </FilterContainer>
+          </FilterContainer> */}
           <AddContainer>
             <AmountContainer>
               <Remove />
