@@ -18,10 +18,8 @@ const Home = () => {
   const [error , SetError] = useState(null); 
 
   const url = process.env.REACT_APP_URL+'/items'
-  // const url = "http://localhost:3000/items"
   useEffect(() => {
     console.log(url)
-    if (localStorage.getItem("token")){
       axios.get(url).then( (response) => {
         setProducts(response.data); 
           setIsLoading(false); 
@@ -32,7 +30,6 @@ const Home = () => {
          console.log(e); 
           setIsLoading(false); 
       } )
-    }
   }, [])
 
 

@@ -43,7 +43,7 @@ const Cart = () => {
       } )
     }
     else {
-      navigate("cart");
+      navigate("/signin");
     }
   },[cartItems])
 
