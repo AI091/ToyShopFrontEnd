@@ -23,7 +23,7 @@ const Register = () => {
       password : password , 
     })
     .then(function (response) {
-      if (response.status == 200){
+      if (response.status === 200){
         localStorage.setItem('token', response.data.auth_token);
         console.log(localStorage.getItem('token'));
         navigate("/");
