@@ -1,6 +1,86 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useState } from "react";
+import Axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const Register = () => {
+  const [firstName , SetFirstName] = useState(''); 
+  const [lastName , SetLastName] = useState(''); 
+  const [username , SetUsername] = useState(''); 
+  const [email , SetEmail] = useState(''); 
+  const [password , setPassword] = useState(''); 
+  const [confirmPassword , setConfirmPassword] = useState(''); 
+  const navigate = useNavigate() ; 
+
+  const signUp = (e) =>{ 
+    e.preventDefault();
+    Axios.post(`${process.env.URL}/users/signup`, {
+      first_name: firstName,
+      last_name: lastName , 
+      username : username, 
+      email : email , 
+      password : password , 
+    })
+    .then(function (response) {
+      if (response.status == 200){
+        localStorage.setItem('token', response.data.auth_token);
+        console.log(localStorage.getItem('token'));
+        navigate("/");
+      }
+    })
+  }
+
+
+  return (
+    <Container>
+      <Wrapper>
+        <Title>CREATE AN ACCOUNT</Title>
+        <Form>
+          <Input placeholder="first_name" 
+          type = "text"
+          required 
+          onChange={(e)=>SetFirstName(e.target.value)}
+          />
+          <Input placeholder="last name"
+          type = "text"
+          required 
+          onChange={(e)=>SetLastName(e.target.value)} 
+          />
+          <Input placeholder="username" 
+          type = "text"
+          required 
+          onChange={(e)=>SetUsername(e.target.value)}          />
+          <Input placeholder="email" 
+          type = "email"
+          required 
+          onChange={(e)=>SetEmail(e.target.value)}  
+          />
+          <Input placeholder="password" 
+          type = "password"
+          required 
+          onChange={(e)=>setPassword(e.target.value)}               />
+          <Input placeholder="confirm password"
+          type = "password"
+          required 
+          onChange={(e)=>setConfirmPassword(e.target.value)} />
+          <Agreement>
+            By creating an account, I consent to the processing of my personal
+            data in accordance with the <b>PRIVACY POLICY</b>
+          </Agreement>
+          <Button onClick={(e)=> signUp(e)} >CREATE</Button>
+          
+        </Form>
+      </Wrapper>
+    </Container>
+  );
+};
+
+export default Register;
+
+
+
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -53,62 +133,3 @@ const Button = styled.button`
   color: white;
   cursor: pointer;
 `;
-const Register = () => {
-  const [firstName , SetFirstName] = useState(''); 
-  const [lastName , SetLastName] = useState(''); 
-  const [username , SetUsername] = useState(''); 
-  const [email , SetEmail] = useState(''); 
-  const [password , setPassword] = useState(''); 
-  const [confirmPassword , setConfirmPassword] = useState(''); 
-
-
-  const url = "http://localhost:3000/users/signup"; 
-  
-  const signup = (url , payload) => {}
-
-
-
-  return (
-    <Container>
-      <Wrapper>
-        <Title>CREATE AN ACCOUNT</Title>
-        <Form>
-          <Input placeholder="first_name" 
-          type = "text"
-          required 
-          onChange={(e)=>SetFirstName(e.target.value)}
-          />
-          <Input placeholder="last name"
-          type = "text"
-          required 
-          onChange={(e)=>SetLastName(e.target.value)} 
-          />
-          <Input placeholder="username" 
-          type = "text"
-          required 
-          onChange={(e)=>SetUsername(e.target.value)}          />
-          <Input placeholder="email" 
-          type = "email"
-          required 
-          onChange={(e)=>SetEmail(e.target.value)}  
-          />
-          <Input placeholder="password" 
-          type = "password"
-          required 
-          onChange={(e)=>setPassword(e.target.value)}               />
-          <Input placeholder="confirm password"
-          type = "password"
-          required 
-          onChange={(e)=>setPassword(e.target.value)} />
-          <Agreement>
-            By creating an account, I consent to the processing of my personal
-            data in accordance with the <b>PRIVACY POLICY</b>
-          </Agreement>
-          <Button>CREATE</Button>
-        </Form>
-      </Wrapper>
-    </Container>
-  );
-};
-
-export default Register;

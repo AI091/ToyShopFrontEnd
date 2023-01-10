@@ -5,7 +5,81 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
-import { useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
+import { useState } from "react";
+import addCartItem from "../addCartItem"
+
+const Product = () => {
+  const [cartItemQuantity , setCartItemQuantity] = useState(0) ;
+
+  const handleAdd= (e) =>{
+    e.preventDefault() ; 
+    setCartItemQuantity(cartItemQuantity+1)
+  }
+
+  const handleRemove = (e)=>{
+    e.preventDefault() ; 
+    if (cartItemQuantity){
+      setCartItemQuantity(cartItemQuantity-1)      
+    }
+  } 
+  const item  = useLocation().state ; 
+
+
+  const handleAddToCart = (e)=> {
+    e.preventDefault(); 
+    if(cartItemQuantity){
+      addCartItem(process.env.REACT_APP_URL +'/cart/add-item' , cartItemQuantity , item.id)
+    }
+  }
+
+  return (
+    <Container>
+      <Navbar />
+      <Announcement />
+      <Wrapper>
+        <ImgContainer>
+          <Image src={'/images/'+item.image} />
+        </ImgContainer>
+        <InfoContainer>
+          <Title>{item.name}</Title>
+          <Desc>
+            {item.description}   
+          </Desc>
+          <Price>EGP {item.price}</Price>
+          <AddContainer>
+            <AmountContainer>
+              <Remove onClick = {
+                (e) => {
+                  handleRemove(e);
+                }
+              }/>
+              <Amount>{cartItemQuantity}</Amount>
+              <Add onClick = {(e)=>
+              {
+                handleAdd(e); 
+              }
+              } />
+            </AmountContainer>
+            <Button onClick = {
+              (e)=>{
+                handleAddToCart(e); 
+              }
+            }>ADD TO CART</Button>
+          </AddContainer>
+        </InfoContainer>
+      </Wrapper>
+      <Newsletter />
+      <Footer />
+    </Container>
+  );
+};
+
+export default Product;
+
+
+
+
 
 const Container = styled.div``;
 
@@ -115,57 +189,3 @@ const Button = styled.button`
       background-color: #f8f4f4;
   }
 `;
-
-
-const Product = (props) => {
-  const item  = useLocation().state ; 
-  console.log(item); 
-  return (
-    <Container>
-      <Navbar />
-      <Announcement />
-      <Wrapper>
-        <ImgContainer>
-          <Image src={'/images/'+item.image} />
-        </ImgContainer>
-        <InfoContainer>
-          <Title>{item.name}</Title>
-          <Desc>
-            {item.description}   
-          </Desc>
-          <Price>EGP {item.price}</Price>
-          {/* <FilterContainer>
-            <Filter>
-              <FilterTitle>Color</FilterTitle>
-              <FilterColor color="black" />
-              <FilterColor color="darkblue" />
-              <FilterColor color="gray" />
-            </Filter>
-            <Filter>
-              <FilterTitle>Size</FilterTitle>
-              <FilterSize>
-                <FilterSizeOption>XS</FilterSizeOption>
-                <FilterSizeOption>S</FilterSizeOption>
-                <FilterSizeOption>M</FilterSizeOption>
-                <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>XL</FilterSizeOption>
-              </FilterSize>
-            </Filter>
-          </FilterContainer> */}
-          <AddContainer>
-            <AmountContainer>
-              <Remove />
-              <Amount>1</Amount>
-              <Add />
-            </AmountContainer>
-            <Button>ADD TO CART</Button>
-          </AddContainer>
-        </InfoContainer>
-      </Wrapper>
-      <Newsletter />
-      <Footer />
-    </Container>
-  );
-};
-
-export default Product;

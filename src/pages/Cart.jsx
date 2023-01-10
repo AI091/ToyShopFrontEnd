@@ -4,9 +4,113 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
-import { useState } from "react";
-import { useEffect } from "react";
-import Axios from "axios";
+import { useState , useEffect  } from "react";
+import { Link } from "react-router-dom";
+import CartItems from "../components/CartItems";
+import useGetAuth from "../useGetAuth";
+import OrderSummary from "../components/OrderSummary";
+import { useNavigate } from "react-router-dom";
+
+const axios = require('axios').default;
+
+const Cart = () => {
+
+  // const {data :cartItems  , isLoading , error} = useGetAuth("http://localhost:3000/cart/") ; 
+  const url = process.env.REACT_APP_URL+"/cart/" ; 
+  const [cartItems , setCartItems] = useState(null) ; 
+  const [isLoading , setIsLoading] = useState(true); 
+  const [error , setError] = useState(null) ; 
+  const [totalPrice , setTotalPrice] = useState(null); 
+  const navigate = useNavigate() ; 
+
+  
+  
+  useEffect(() => {
+    if (localStorage.getItem("token")){
+      axios.get(url  ,  {
+        headers: {
+          'Authorization': `${localStorage.token}`,
+         }  
+        }).then( (response) => {
+          setCartItems(response.data); 
+          setIsLoading(false); 
+          setTotalPrice((response.data.items).reduce((curr,next)=> curr +  (parseInt(next.quantity))*parseFloat(next.price), 0  ))
+        }
+      )
+      .catch( (e)=> {
+          setError(e.message); 
+          setIsLoading(false); 
+      } )
+    }
+  },[cartItems])
+
+  const handleClick = (e)=>{
+    e.preventDefault()
+    navigate("/checkout")
+  }
+
+
+  return (
+    <Container>
+      <Navbar />
+      <Announcement />
+      <Wrapper>
+      {isLoading && <div> Loading...</div>}
+      {error && <div> {error}</div>}
+        {
+        cartItems &&  <div>
+        <Title>YOUR CART</Title>
+        <Top>
+          <Link to = "/" >
+          <TopButton>CONTINUE SHOPPING</TopButton>
+          </Link>
+        </Top>
+        <Bottom>
+        {cartItems && <CartItems  cart_items={cartItems} />}
+        <Summary>
+        <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+        <SummaryItem>
+          <SummaryItemText>Subtotal</SummaryItemText>
+          <SummaryItemPrice>{totalPrice} EGP </SummaryItemPrice>
+        </SummaryItem>
+        <SummaryItem>
+          <SummaryItemText>Estimated Shipping</SummaryItemText>
+          <SummaryItemPrice>30 EGP</SummaryItemPrice>
+        </SummaryItem>
+        <SummaryItem>
+          <SummaryItemText>Shipping Discount</SummaryItemText>
+          <SummaryItemPrice>- 30 EGP</SummaryItemPrice>
+        </SummaryItem>
+        <SummaryItem type="total">
+          <SummaryItemText>Total</SummaryItemText>
+          <SummaryItemPrice>{totalPrice}</SummaryItemPrice>
+        </SummaryItem>
+        <Link to = "/checkout" >
+        <Button >CHECKOUT NOW</Button>
+        </Link>
+
+      </Summary>
+
+        </Bottom>
+        </div>
+        }
+      </Wrapper>
+      <Footer />
+    </Container>
+  );
+};
+
+export default Cart;
+
+
+ 
+
+
+
+
+
+
+
 
 const Container = styled.div``;
 
@@ -155,123 +259,3 @@ const Button = styled.button`
   color: white;
   font-weight: 600;
 `;
-
-const Cart = () => {
-  const [cartItems , setCartItems] = useState(null) ; 
-  const [isLoading , setIsLoading] = useState(true); 
-  const [error , setError] = useState(null)
-  
-  useEffect(() => {
-    if (localStorage.getItem("token")){
-      Axios.get("http://localhost:3000/cart/", {
-      })
-      .then(function (response) {
-        if (response.status == 200){
-          console.log(response); 
-          
-        }
-      })
-    }
-
-  }, [])
- 
-
-  return (
-    <Container>
-      <Navbar />
-      <Announcement />
-      <Wrapper>
-      {isLoading && <div> Loading...</div>}
-      {error && <div> {error}</div>}
-      {}
-        <Title>YOUR BAG</Title>
-        <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
-          <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your Wishlist (0)</TopText>
-          </TopTexts>
-          <TopButton type="filled">CHECKOUT NOW</TopButton>
-        </Top>
-        <Bottom>
-          <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> JESSIE THUNDER SHOES
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size:</b> 37.5
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetail>
-            </Product>
-            <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src="https://i.pinimg.com/originals/2d/af/f8/2daff8e0823e51dd752704a47d5b795c.png" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> HAKURA T-SHIRT
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductColor color="gray" />
-                  <ProductSize>
-                    <b>Size:</b> M
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>1</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$ 20</ProductPrice>
-              </PriceDetail>
-            </Product>
-          </Info>
-          <Summary>
-            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-            <SummaryItem>
-              <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Estimated Shipping</SummaryItemText>
-              <SummaryItemPrice>$ 5.90</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ -5.90</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem type="total">
-              <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
-            </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
-          </Summary>
-        </Bottom>
-      </Wrapper>
-      <Footer />
-    </Container>
-  );
-};
-
-export default Cart;

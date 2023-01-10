@@ -1,8 +1,70 @@
 import styled from "styled-components";
 import {mobile} from "../responsive";
 import { useState } from "react";
-import {Link} from "react-router-dom" 
+import {Link , redirect ,useNavigate} from "react-router-dom" 
 import Axios from "axios"
+
+
+
+const Login = () => {
+  const [handle , setHandle] = useState(''); 
+  const [password , setPassword ] = useState(''); 
+  const navigate = useNavigate();
+
+
+  const handleSubmit = (e) =>{ 
+    e.preventDefault();
+    Axios.post(process.env.REACT_APP_URL+'/users/signin', {
+      login_name: handle,
+      password: password
+    })
+    .then(function (response) {
+      if (response.status == 200){
+        localStorage.setItem('token', response.data.auth_token);
+        console.log(localStorage.getItem('token'));
+        navigate("/");
+      }
+    })
+  }
+
+ 
+ return (
+    <Container>
+      <Wrapper>
+        <Title>SIGN IN</Title>
+        <Form>
+          <Input placeholder="username/email" 
+          type="text"
+          required 
+          onChange = {
+            (e) => {setHandle(e.target.value)
+            }
+           }
+          />
+          <Input placeholder="password" 
+            type="password"
+            required 
+            onChange = {
+              (e) => {setPassword(e.target.value) ; }
+            }
+            />
+          <Button onClick = {(e)=> handleSubmit(e)}>LOGIN
+          </Button>
+
+          <Link to="/register">
+            CREATE A NEW ACCOUNT
+          </Link>
+        </Form>
+      </Wrapper>
+    </Container>
+  );
+
+};  
+
+export default Login;
+
+
+
 
 const Container = styled.div`
   width: 100vw;
@@ -59,56 +121,3 @@ const link = styled.a`
   text-decoration: underline;
   cursor: pointer;
 `;
-
-
-const Login = () => {
-  const [handle , setHandle] = useState(''); 
-  const [password , setPassword ] = useState(''); 
-
-  const handleSubmit = (e) =>{ 
-    e.preventDefault();
-    Axios.post('http://localhost:3000/users/signin', {
-      login_name: handle,
-      password: password
-    })
-    .then(function (response) {
-      if (response.status == 200){
-        localStorage.setItem('token', response.data.auth_token);
-        console.log(localStorage.getItem('token'));
-      }
-    })
-  }
-
-  return (
-    <Container>
-      <Wrapper>
-        <Title>SIGN IN</Title>
-        <Form>
-          <Input placeholder="username/email" 
-          type="text"
-          required 
-          onChange = {
-            (e) => {setHandle(e.target.value)
-            }
-           }
-          />
-          <Input placeholder="password" 
-            type="password"
-            required 
-            onChange = {
-              (e) => {setPassword(e.target.value) ; }
-            }
-            />
-          <Button onClick = {(e)=> handleSubmit(e)}>LOGIN
-          </Button>
-
-          <Link to="/register">
-            CREATE A NEW ACCOUNT
-          </Link>
-        </Form>
-      </Wrapper>
-    </Container>
-  );
-};
-
-export default Login;

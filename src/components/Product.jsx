@@ -4,7 +4,65 @@ import {
   ShoppingCartOutlined,
 } from "@material-ui/icons";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
+import axios, * as others from 'axios';
+import { useState } from "react";
+// import addCartItem from "../addCartItem";
+
+
+const Product = ({ item }) => {
+  const navigate = useNavigate() ; 
+  const [addQuantity , setAddQuantity] =useState(0) ; 
+  const addtoCart = (event)=>{
+    event.preventDefault();
+    if(localStorage.getItem("token")){
+    axios.post
+    (process.env.REACT_APP_URL +'/cart/add-item' , {
+      item_id : item.id , 
+      quantity : 1 , 
+    }, 
+    {headers : {
+      authorization : localStorage.getItem('token')
+    }}
+    )
+    .then( (res)=> {
+    console.log(res) ; 
+  })
+  .catch ( (err)=>  {
+  console.log(err)})
+    }
+}
+
+
+  return (
+    <Link to = {`/product/${item.id}`} state ={item}>
+    <Container>
+      {/* <Link to = {`/product/${item.id}`}>
+      </Link> */}
+
+      <Circle />
+      <Image src={"images/"+item.image}  />
+      
+      <Info>
+        <Icon>
+          <ShoppingCartOutlined onClick= {(e)=>(addtoCart(e))}/>
+        </Icon>
+        <Icon>
+          <SearchOutlined />
+        </Icon>
+        <Icon>
+          <FavoriteBorderOutlined />
+        </Icon>
+      </Info>
+    </Container>
+     </Link>
+  );
+};
+
+export default Product;
+
+
+
 
 const Info = styled.div`
   opacity: 0;
@@ -66,31 +124,3 @@ const Icon = styled.div`
     transform: scale(1.1);
   }
 `;
-
-const Product = ({ item }) => {
-  return (
-    <Link to = {`/product/${item.id}`} state ={item}>
-    <Container>
-      {/* <Link to = {`/product/${item.id}`}>
-      </Link> */}
-
-      <Circle />
-      <Image src={"images/"+item.image}  />
-
-      <Info>
-        <Icon>
-          <ShoppingCartOutlined />
-        </Icon>
-        <Icon>
-          <SearchOutlined />
-        </Icon>
-        <Icon>
-          <FavoriteBorderOutlined />
-        </Icon>
-      </Info>
-    </Container>
-    </Link>
-  );
-};
-
-export default Product;

@@ -5,6 +5,42 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import { Outlet, Link } from "react-router-dom";
 
+
+
+const Navbar = () => {
+  return (
+    <Container>
+      <Wrapper>
+        <Left>
+          <Language>EN</Language>
+        </Left>
+        <Center>
+          <Logo>EJUSToys.</Logo>
+        </Center>
+        <Right>
+          <Link to= "/register">
+            <MenuItem>REGISTER</MenuItem>
+          </Link>
+          <Link to= "/login">
+            <MenuItem>SIGN IN</MenuItem>
+          </Link>
+          <Link to= "/cart"> 
+            <MenuItem>
+              <Badge badgeContent={1} color="primary">
+                <ShoppingCartOutlined />
+              </Badge>
+            </MenuItem>
+          </Link>
+        </Right>
+      </Wrapper>
+    </Container>
+  );
+};
+
+export default Navbar;
+
+
+
 const Container = styled.div`
   height: 60px;
   ${mobile({ height: "50px" })}
@@ -66,39 +102,3 @@ const MenuItem = styled.div`
   margin-left: 25px;
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
-
-const Navbar = () => {
-  return (
-    <Container>
-      <Wrapper>
-        <Left>
-          <Language>EN</Language>
-          <SearchContainer>
-            <Input placeholder="Search" />
-            <Search style={{ color: "gray", fontSize: 16 }} />
-          </SearchContainer>
-        </Left>
-        <Center>
-          <Logo>EJUSToys.</Logo>
-        </Center>
-        <Right>
-          <Link to= "/register">
-            <MenuItem>REGISTER</MenuItem>
-          </Link>
-          <Link to= "/login">
-            <MenuItem>SIGN IN</MenuItem>
-          </Link>
-          <Link to= "/cart"> 
-            <MenuItem>
-              <Badge badgeContent={4} color="primary">
-                <ShoppingCartOutlined />
-              </Badge>
-            </MenuItem>
-          </Link>
-        </Right>
-      </Wrapper>
-    </Container>
-  );
-};
-
-export default Navbar;
