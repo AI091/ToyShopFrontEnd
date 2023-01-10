@@ -41,9 +41,13 @@ const Cart = () => {
           setError(e.message); 
           setIsLoading(false);
           console.log(e)
-          navigate("/signin");
+          navigate("/login");
 
       } )
+    }
+    else {
+      navigate("/login");
+
     }
   },[cartItems])
 
