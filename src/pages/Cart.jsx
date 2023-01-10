@@ -42,6 +42,9 @@ const Cart = () => {
           setIsLoading(false); 
       } )
     }
+    else {
+      navigate("cart");
+    }
   },[cartItems])
 
   const handleClick = (e)=>{

@@ -11,10 +11,13 @@ import addCartItem from "../addCartItem"
 
 const Product = () => {
   const [cartItemQuantity , setCartItemQuantity] = useState(0) ;
+  const item  = useLocation().state ; 
 
   const handleAdd= (e) =>{
     e.preventDefault() ; 
+    if(!( cartItemQuantity +1 > item.quantity)){
     setCartItemQuantity(cartItemQuantity+1)
+    }
   }
 
   const handleRemove = (e)=>{
@@ -23,7 +26,6 @@ const Product = () => {
       setCartItemQuantity(cartItemQuantity-1)      
     }
   } 
-  const item  = useLocation().state ; 
 
 
   const handleAddToCart = (e)=> {
@@ -67,6 +69,9 @@ const Product = () => {
               }
             }>ADD TO CART</Button>
           </AddContainer>
+          <div className="LOW STOCK"> {item.quantity < 10 && <div> 
+              {`LOW STOCK ${item.quantity} remaining`}
+            </div>}</div>
         </InfoContainer>
       </Wrapper>
       <Newsletter />

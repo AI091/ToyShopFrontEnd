@@ -41,7 +41,7 @@ const Home = () => {
   const [brand , setBrand] = useState(null);
   const [minPrice , setMinPrice] = useState(0);
   const [maxPrice , setMaxPrice] = useState(null); 
- 
+  
 
   const handleSearch = (event)=> {
     event.preventDefault() 
