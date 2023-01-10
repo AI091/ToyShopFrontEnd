@@ -39,7 +39,8 @@ const Cart = () => {
       )
       .catch( (e)=> {
           setError(e.message); 
-          setIsLoading(false); 
+          setIsLoading(false);
+          console.log(e)
           navigate("/signin");
 
       } )
