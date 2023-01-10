@@ -15,7 +15,7 @@ const Register = () => {
 
   const signUp = (e) =>{ 
     e.preventDefault();
-    Axios.post(`${process.env.URL}/users/signup`, {
+    Axios.post(`${process.env.REACT_APP_URL}/users/signup`, {
       first_name: firstName,
       last_name: lastName , 
       username : username, 
