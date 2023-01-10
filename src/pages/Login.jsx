@@ -19,6 +19,7 @@ const Login = () => {
       password: password
     })
     .then(function (response) {
+      console.log(response)
       if (response.status == 200){
         localStorage.setItem('token', response.data.auth_token);
         console.log(localStorage.getItem('token'));

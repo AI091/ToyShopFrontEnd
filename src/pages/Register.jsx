@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useState } from "react";
-import Axios from "axios";
+import axios, * as others from 'axios';
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -10,12 +10,18 @@ const Register = () => {
   const [username , SetUsername] = useState(''); 
   const [email , SetEmail] = useState(''); 
   const [password , setPassword] = useState(''); 
-  const [confirmPassword , setConfirmPassword] = useState(''); 
   const navigate = useNavigate() ; 
 
   const signUp = (e) =>{ 
     e.preventDefault();
-    Axios.post(`${process.env.REACT_APP_URL}/users/signup`, {
+    console.log({
+      first_name: firstName,
+      last_name: lastName , 
+      username : username, 
+      email : email , 
+      password : password
+    })
+    axios.post(process.env.REACT_APP_URL +'/users/signup', {
       first_name: firstName,
       last_name: lastName , 
       username : username, 
@@ -29,7 +35,10 @@ const Register = () => {
         navigate("/");
       }
     })
-  }
+    .catch((e)=>{
+      console.log(e)
+    })
+      }
 
 
   return (
@@ -63,7 +72,7 @@ const Register = () => {
           <Input placeholder="confirm password"
           type = "password"
           required 
-          onChange={(e)=>setConfirmPassword(e.target.value)} />
+           />
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
