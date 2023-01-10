@@ -40,10 +40,9 @@ const Cart = () => {
       .catch( (e)=> {
           setError(e.message); 
           setIsLoading(false); 
+          navigate("/signin");
+
       } )
-    }
-    else {
-      navigate("/signin");
     }
   },[cartItems])
 
